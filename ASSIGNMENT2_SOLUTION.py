@@ -4,8 +4,6 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
-sns.set()
 
 
 # define functions for reading and transposing data
@@ -158,7 +156,6 @@ def barplot(labels_array, width, y_data, y_label, label, title):
     plt.xlabel(None)
     plt.xticks(x, labels_array)
     
-    sns.despine(bottom=True) #seaborn function despine is used to take away the top and the right spine of the function
 
 
     plt.legend()
@@ -195,7 +192,17 @@ title = 'Agriculture, forestry, and fishing, value added (% of GDP)'
 # the parameters are passed into the defined function and produces the desired plot
 barplot(labels_array, width, y_data, y_label, label, title)
 
+#Here we create a dataframe of Canada which takes some indicators as parameters
+data_Canada = {'Urban pop. growth': data_urban_transpose['Canada'],
+        'Electricity production': data_electricity_transpose['Canada'],
+        'Agric. forestry and Fisheries': data_agriculture_transpose['Canada'],
+        'CO2 Emmissions': data_CO2_transpose['Canada'],
+        'Forest Area': data_forest_transpose['Canada'],
+        'GDP Annual Growth': data_GDP_transpose['Canada']        
+        }
 
+df_Canada = pd.DataFrame(data_Canada)
+print(df_Canada)
 
 
 
