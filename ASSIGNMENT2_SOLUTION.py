@@ -1,10 +1,10 @@
 
-
 #import important libraries
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
+import seaborn as sns
+from scipy import stats
 
 # define functions for reading and transposing data
 def read_data_excel(excel_url, sheet_name, new_cols, countries):
@@ -29,24 +29,35 @@ def read_data_excel(excel_url, sheet_name, new_cols, countries):
 
 # The excel url below indicates Urban population growth (annual %) 
 excel_url_urban = 'https://api.worldbank.org/v2/en/indicator/SP.URB.GROW?downloadformat=excel' 
+
 # The excel url below indicates electricity production from oil, gas and coal sources (% of total)
 excel_url_electricity = 'https://api.worldbank.org/v2/en/indicator/EG.ELC.FOSL.ZS?downloadformat=excel'
+
 # the excel url below indicates Agriculture, forestry, and fishing, value added (% of GDP)
 excel_url_agriculture = 'https://api.worldbank.org/v2/en/indicator/NV.AGR.TOTL.ZS?downloadformat=excel'
+
 # the excel url below indicates CO2 emissions (metric tons per capita)
-excel_url_C02 = 'https://api.worldbank.org/v2/en/indicator/EN.ATM.CO2E.PC?downloadformat=excel'
+excel_url_CO2 = 'https://api.worldbank.org/v2/en/indicator/EN.ATM.CO2E.PC?downloadformat=excel'
+
+# the excel url below indicates Forest area (% of land area)
+excel_url_forest = 'https://api.worldbank.org/v2/en/indicator/AG.LND.FRST.ZS?downloadformat=excel'
+
+# the excel url below indicates GDP growth (annual %)
+excel_url_GDP = 'https://api.worldbank.org/v2/en/indicator/NY.GDP.MKTP.KD.ZG?downloadformat=excel'
+
 # all the data used have the same sheet name
 sheet_name = 'Data'
-new_cols = ['Country Name', '2000', '2002', '2004', '2006','2008', '2010', '2012', '2014']
-countries = ['Canada', 'United States', 'United Kingdom', 'Nigeria', 'China', 'Brazil', 'Australia']
+new_cols = ['Country Name', '1997', '2000', '2003', '2006','2009', '2012', '2015']
+countries = ['Germany', 'United States', 'United Kingdom', 'Nigeria', 'China', 'Brazil', 'Australia']
 
 #Each parameters are passed into the function to produced the preprocessed and transposed dataframe 
 
 data_urban_read, data_urban_transpose = read_data_excel(excel_url_urban, sheet_name, new_cols, countries)
 data_electricity_read, data_electricity_transpose = read_data_excel(excel_url_electricity, sheet_name, new_cols, countries)
 data_agriculture_read, data_agriculture_transpose = read_data_excel(excel_url_agriculture, sheet_name, new_cols, countries)
-data_C02, data_C02_transpose = read_data_excel(excel_url_C02, sheet_name, new_cols, countries)
-
+data_CO2, data_CO2_transpose = read_data_excel(excel_url_CO2, sheet_name, new_cols, countries)
+data_forest, data_forest_transpose = read_data_excel(excel_url_forest, sheet_name, new_cols, countries)
+data_GDP, data_GDP_transpose = read_data_excel(excel_url_GDP, sheet_name, new_cols, countries)
 
 print(data_urban_read)
 
@@ -63,10 +74,10 @@ print(data_agriculture_read)
 print(data_agriculture_transpose)
 
 
-print(data_C02 )
+print(data_CO2 )
 
 
-print(data_C02_transpose)
+print(data_CO2_transpose)
 
 
 
@@ -95,15 +106,15 @@ def multiple_plot(x_data, y_data, xlabel, ylabel, title, labels, colors):
 
 # Parameters for plotting multiple line plots of electricity production from oil, gas and coal (% of total)
 x_data = data_electricity_transpose.index # the  row index is used as the values for the x-axis
-y_data = [data_electricity_transpose['Canada'], 
+y_data = [data_electricity_transpose['Germany'], 
           data_electricity_transpose['United States'], 
           data_electricity_transpose['Nigeria'],
           data_electricity_transpose['China'], 
           data_electricity_transpose['Brazil'], 
           data_electricity_transpose['Australia']]
 xlabel = 'Year'
-ylabel = 'Countries'
-labels = ['Canada', 'USA', 'UK', 'Nigeria', 'China', 'Brazil', 'Australia']
+ylabel = '% electricity production'
+labels = ['Germany', 'USA', 'UK', 'Nigeria', 'China', 'Brazil', 'Australia']
 colors = ['red', 'magenta', 'blue', 'yellow', 'green', 'purple', 'black']
 title = 'Electricity production from oil, gas and coal sources (% of total)'
 
@@ -113,18 +124,19 @@ multiple_plot(x_data, y_data, xlabel, ylabel, title, labels, colors)
 
 
 # parameters for producing multiple plots of CO2 emissions (metric tons per capita)
-x_data = data_C02_transpose.index # the  row index is used as the values for the x-axis
-y_data = [data_C02_transpose['Canada'], 
-          data_C02_transpose['United States'], 
-          data_C02_transpose['Nigeria'],
-          data_C02_transpose['China'], 
-          data_C02_transpose['Brazil'], 
-          data_C02_transpose['Australia']]
+x_data = data_CO2_transpose.index # the  row index is used as the values for the x-axis
+y_data = [data_CO2_transpose['Germany'], 
+          data_CO2_transpose['United States'], 
+          data_CO2_transpose['Nigeria'],
+          data_CO2_transpose['China'], 
+          data_CO2_transpose['Brazil'], 
+          data_CO2_transpose['Australia']]
 xlabel = 'Year'
-ylabel = 'Countries'
-labels = ['Canada', 'USA', 'UK', 'Nigeria', 'China', 'Brazil', 'Australia']
+ylabel = 'metric tons'
+labels = ['Germany', 'USA', 'UK', 'Nigeria', 'China', 'Brazil', 'Australia']
 colors = ['red', 'magenta', 'blue', 'yellow', 'green', 'purple', 'black']
 title = 'CO2 emissions (metric tons per capita)'
+
 # the attributes are passed into the function and returned to give the desired plot
 multiple_plot(x_data, y_data, xlabel, ylabel, title, labels, colors)
 
@@ -156,24 +168,25 @@ def barplot(labels_array, width, y_data, y_label, label, title):
     plt.xlabel(None)
     plt.xticks(x, labels_array)
     
+    sns.despine(bottom=True) #seaborn function despine is used to take away the top and the right spine of the function  #seaborn function despine is used to take away the top and the right spine of the function
 
 
     plt.legend()
     ax.tick_params(bottom=False, left=True)
 
     plt.show()
-
-
+    return
+    
 
 # the parameters for producing grouped bar plots of Urban population growth (annual %)
-labels_array = ['Canada', 'USA', 'UK', 'Nigeria', 'China', 'Brazil', 'Australia']
+labels_array = ['Germany', 'USA', 'UK', 'Nigeria', 'China', 'Brazil', 'Australia']
 width = 0.2 
-y_data = [data_urban_read['2000'], 
-          data_urban_read['2004'], 
-          data_urban_read['2008'], 
-          data_urban_read['2012']]
+y_data = [data_urban_read['1997'], 
+          data_urban_read['2003'], 
+          data_urban_read['2009'], 
+          data_urban_read['2015']]
 y_label = 'Urban growth'
-label = ['Year 2000', 'Year 2004', 'Year 2008', 'Year 2012']
+label = ['Year 1997', 'Year 2003', 'Year 2009', 'Year 2015']
 title = 'Urban population growth (annual %)'
 
 # the parameters are passed into the defined function and produces the desired plot
@@ -181,28 +194,63 @@ barplot(labels_array, width, y_data, y_label, label, title)
 
 
 
-# # the parameters for producing grouped bar plots of Agriculture, forestry, and fishing, value added (% of GDP)
+# the parameters for producing grouped bar plots of Agriculture, forestry, and fishing, value added (% of GDP)
 labels_array = ['Canada', 'USA', 'UK', 'Nigeria', 'China', 'Brazil', 'Australia']
 width = 0.2 
-y_data = [data_agriculture_read['2000'], data_agriculture_read['2004'], data_agriculture_read['2008'], data_agriculture_read['2012']]
-y_label = 'Agriculture'
-label = ['Year 2000', 'Year 2004', 'Year 2008', 'Year 2012']
+y_data = [data_agriculture_read['1997'], 
+          data_agriculture_read['2003'], 
+          data_agriculture_read['2009'], 
+          data_agriculture_read['2015']]
+y_label = '% of GDP'
+label = ['Year 1997', 'Year 2003', 'Year 2009', 'Year 2015']
 title = 'Agriculture, forestry, and fishing, value added (% of GDP)'
 
 # the parameters are passed into the defined function and produces the desired plot
 barplot(labels_array, width, y_data, y_label, label, title)
 
-#Here we create a dataframe of Canada which takes some indicators as parameters
-data_Canada = {'Urban pop. growth': data_urban_transpose['Canada'],
-        'Electricity production': data_electricity_transpose['Canada'],
-        'Agric. forestry and Fisheries': data_agriculture_transpose['Canada'],
-        'CO2 Emmissions': data_CO2_transpose['Canada'],
-        'Forest Area': data_forest_transpose['Canada'],
-        'GDP Annual Growth': data_GDP_transpose['Canada']        
+#Here we create a dataframe of Germany which takes some indicators as parameters
+data_Germany = {'Urban pop. growth': data_urban_transpose['Germany'],
+        'Electricity production': data_electricity_transpose['Germany'],
+        'Agric. forestry and Fisheries': data_agriculture_transpose['Germany'],
+        'CO2 Emmissions': data_CO2_transpose['Germany'],
+        'Forest Area': data_forest_transpose['Germany'],
+        'GDP Annual Growth': data_GDP_transpose['Germany']        
         }
 
-df_Canada = pd.DataFrame(data_Canada)
-print(df_Canada)
+df_Germany = pd.DataFrame(data_Germany)
+print(df_Germany)
+
+def correlation_pvalues(data_x, data_y):
+    """
+    This function defines correlation and pvalues of a particular indicator against other selected indicators
+    data_x: the indicator of which we want to discuss
+    data_y: the selected indicators from the dataframe
+    """
+    corr_dataframe = pd.DataFrame(columns=['r','p']) # r signifies correlation coefficient and p signifies p-values
+    for col in data_y:
+        if pd.api.types.is_numeric_dtype(data_y[col]) and not '': # it ignores anything that is not numeric
+            r, p = stats.pearsonr(data_x, data_y[col]) # the scipy function used here for calculation the correlation coefficient and p-values
+            corr_dataframe.loc[col] = [round(r,3), round(p,3)] # the values are round to 3 significant figures
+    return corr_dataframe
+
+
+# the indicator of interest is Urban population growth against the other factors from the Germany dataframe  
+data_x = df_Germany['Urban pop. growth']
+data_y = df_Germany
+
+urban_pop_growth = correlation_pvalues(data_x, data_y) # the correlation coefficient and p values of Urban population growth against other indicators are printed below
+print(urban_pop_growth)
+
+
+# the indicator of interest is forest area against the other factors from the Germany dataframe  
+data_x = df_Germany['Forest Area']
+data_y = df_Germany
+
+forest_area = correlation_pvalues(data_x, data_y) # the correlation coefficient and p values of Forest area against other indicators are printed below
+print(forest_area)
+
+
+
 
 
 
