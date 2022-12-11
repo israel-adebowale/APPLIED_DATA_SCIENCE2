@@ -273,7 +273,7 @@ print(corr_ger)
 # The function below constructs a heatmap using the seaborn package
 def heatmap(corr_matrix, title):
     """ This function defines a heatmap that accept the correlation matrix and title of the map as parameters """
-    plt.figure(figsize=(7, 7))
+    plt.figure(figsize=(7,7))
     sns.set(font_scale=1.0)
     sns.heatmap(corr_matrix, annot=True) # seaborn is used to produce the heatmap of the Germany indicators
     plt.title(title, fontsize=22)
