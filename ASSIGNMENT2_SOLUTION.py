@@ -23,6 +23,7 @@ def read_data_excel(excel_url, sheet_name, new_cols, countries):
     
     return data_read, data_read.T # the preprocessed data and transposed data are returned respectively.
 
+
 # The excel url below indicates Urban population growth (annual %) 
 excel_url_urban = 'https://api.worldbank.org/v2/en/indicator/SP.URB.GROW?downloadformat=excel' 
 
@@ -100,12 +101,12 @@ def multiple_plot(x_data, y_data, xlabel, ylabel, title, labels, colors):
     labels: these are the specific labels of each line plots which is displayed by the legend function
     colors: these are the colors of each line plots on the graph
     """
-    plt.figure(figsize=(12,8)) 
-    plt.title(title, fontsize=20) 
+    plt.figure(figsize=(10,8), dpi=200) 
+    plt.title(title, fontsize=20, fontweight='bold') 
     for i in range(len(y_data)):  # this loops over the dataframe and produces the desired plot
         plt.plot(x_data, y_data[i], label=labels[i], color=colors[i])
-    plt.xlabel(xlabel, fontsize=20)
-    plt.ylabel(ylabel, fontsize=20)
+    plt.xlabel(xlabel, fontsize=20, fontweight='bold')
+    plt.ylabel(ylabel, fontsize=20, fontweight='bold')
     plt.legend(bbox_to_anchor = (1.02,1))
     plt.show()
     return
@@ -159,7 +160,7 @@ def barplot(labels_array, width, y_data, y_label, label, title):
     """
     
     x = np.arange(len(labels_array)) # x is the range of values using the length of the label_array
-    fig, ax  = plt.subplots(figsize=(16,12))
+    fig, ax  = plt.subplots(figsize=(12,10), dpi=200)
     
     plt.bar(x - width, y_data[0], width, label=label[0]) 
     plt.bar(x, y_data[1], width, label=label[1])
@@ -167,12 +168,13 @@ def barplot(labels_array, width, y_data, y_label, label, title):
     plt.bar(x + width*2, y_data[3], width, label=label[3])
     
     
-    plt.title(title, fontsize=20)
-    plt.ylabel(y_label, fontsize=20)
+    plt.title(title, fontsize=20, fontweight='bold')
+    plt.ylabel(y_label, fontsize=20, fontweight='bold')
     plt.xlabel(None)
     plt.xticks(x, labels_array)
     
     sns.despine(bottom=True) #seaborn function despine is used to take away the top and the right spine of the function  #seaborn function despine is used to take away the top and the right spine of the function
+
 
     plt.legend()
     ax.tick_params(bottom=False, left=True)
@@ -276,7 +278,7 @@ def heatmap(corr_matrix, title):
     plt.figure(figsize=(7,7))
     sns.set(font_scale=1.0)
     sns.heatmap(corr_matrix, annot=True) # seaborn is used to produce the heatmap of the Germany indicators
-    plt.title(title, fontsize=22)
+    plt.title(title, fontsize=22, fontweight='bold')
     return
 
 # the heatmap for germany is plotted below
