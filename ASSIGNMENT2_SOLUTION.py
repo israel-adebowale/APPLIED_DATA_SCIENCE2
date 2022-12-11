@@ -267,11 +267,6 @@ data_y = df_Germany
 forest_area = correlation_pvalues(data_x, data_y) # the correlation coefficient and p values of Forest area against other indicators are printed below
 print(forest_area)
 
-
-# Here the correlation matrix of indicators for Germany are displayed below and it is used to construct the heatmap
-corr_ger = df_Germany.corr()
-print(corr_ger)
-
 # The function below constructs a heatmap using the seaborn package
 def heatmap(corr_matrix, title):
     """ This function defines a heatmap that accept the correlation matrix and title of the map as parameters """
@@ -280,6 +275,10 @@ def heatmap(corr_matrix, title):
     sns.heatmap(corr_matrix, annot=True) # seaborn is used to produce the heatmap of the Germany indicators
     plt.title(title, fontsize=22, fontweight='bold')
     return
+
+# Here the correlation matrix of indicators for Germany are displayed below and it is used to construct the heatmap
+corr_ger = df_Germany.corr()
+print(corr_ger)
 
 # the heatmap for germany is plotted below
 heatmap(corr_ger, 'Germany') # the parameters are passed into the function and it is displayed below
