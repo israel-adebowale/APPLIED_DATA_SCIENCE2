@@ -85,8 +85,8 @@ GDP_statistics = data_GDP_transpose.describe()
 print(GDP_statistics)
 
 # the desciptive statistics of Forest area (% of land area)
-forest_statistics = data_forest_tranpose.describe()
-print(Forest_statistics)
+forest_statistics = data_forest_transpose.describe()
+print(forest_statistics)
 
 # The function below construct a multiple line plot
 def multiple_plot(x_data, y_data, xlabel, ylabel, title, labels, colors):
