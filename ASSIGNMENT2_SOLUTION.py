@@ -2,7 +2,6 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 from scipy import stats
 
 # define functions for reading and transposing data
@@ -172,9 +171,6 @@ def barplot(labels_array, width, y_data, y_label, label, title):
     plt.ylabel(y_label, fontsize=20, fontweight='bold')
     plt.xlabel(None)
     plt.xticks(x, labels_array)
-    
-    sns.despine(bottom=True) #seaborn function despine is used to take away the top and the right spine of the function  #seaborn function despine is used to take away the top and the right spine of the function
-
 
     plt.legend()
     ax.tick_params(bottom=False, left=True)
@@ -199,7 +195,7 @@ barplot(labels_array, width, y_data, y_label, label, title)
 
 
 # the parameters for producing grouped bar plots of Agriculture, forestry, and fishing, value added (% of GDP)
-labels_array = ['Canada', 'USA', 'UK', 'Nigeria', 'China', 'Brazil', 'Australia']
+labels_array = ['Germany', 'USA', 'UK', 'Nigeria', 'China', 'Brazil', 'Australia']
 width = 0.2 
 y_data = [data_agriculture_read['1997'], 
           data_agriculture_read['2003'], 
@@ -267,21 +263,43 @@ data_y = df_Germany
 forest_area = correlation_pvalues(data_x, data_y) # the correlation coefficient and p values of Forest area against other indicators are printed below
 print(forest_area)
 
-# The function below constructs a heatmap using the seaborn package
-def heatmap(corr_matrix, title):
-    """ This function defines a heatmap that accept the correlation matrix and title of the map as parameters """
-    plt.figure(figsize=(7,7))
-    sns.set(font_scale=1.0)
-    sns.heatmap(corr_matrix, annot=True) # seaborn is used to produce the heatmap of the Germany indicators
-    plt.title(title, fontsize=22, fontweight='bold')
+# the function defines a heat map
+def correlation_heatmap(data, corr, title):
+    """
+    The function creates a heatmap using matplotlib and it takes three arguments
+    data: this is the dataframe for the country to be examined
+    corr: this is the correlation matrix of the dataframe 
+    title: title of the heatmap
+    """
+    plt.imshow(corr, cmap='coolwarm', interpolation='none')
+    plt.colorbar()
+
+    # Show all ticks and label them with the dataframe column name
+    plt.xticks(range(len(data.columns)), data.columns, rotation=90, fontsize=15)
+    plt.yticks(range(len(data.columns)), data.columns, rotation=0, fontsize=15)
+    plt.gcf().set_size_inches(8,8)
+    plt.title(title, fontsize=20, fontweight='bold')
+
+    # Loop over data dimensions and create text annotations
+    labels = corr.values # the labels of the heatmap is deduced by getting the values of the correlation matrix
+    for i in range(labels.shape[0]):
+        for j in range(labels.shape[1]):
+            plt.text(j, i, '{:.2f}'.format(labels[i,j]), 
+                           ha="center", va="center", color="white")
+
+    plt.show()
     return
 
+
 # Here the correlation matrix of indicators for Germany are displayed below and it is used to construct the heatmap
-corr_ger = df_Germany.corr()
-print(corr_ger)
+corr_Germany = df_Germany.corr()
+print(corr_Germany)
 
 # the heatmap for germany is plotted below
-heatmap(corr_ger, 'Germany') # the parameters are passed into the function and it is displayed below
+data = df_Germany
+corr = corr_Germany
+title = 'Germany'
+correlation_heatmap(data, corr, title) # the parameters are passed into the function and it is displayed below
 
 
 # Here the correlation matrix of indicators for Nigeria are displayed below and it is used to construct the heatmap
@@ -289,4 +307,7 @@ corr_Nigeria = df_Nigeria.corr()
 print(corr_Nigeria)
 
 #the heatmap for Nigeria is plotted below
-heatmap(corr_Nigeria, 'Nigeria') # the parameters are passed into the function and it is displayed below
+data = df_Nigeria
+corr = corr_Nigeria
+title = 'Nigeria'
+correlation_heatmap(data, corr, title) # the parameters are passed into the function and it is displayed below
