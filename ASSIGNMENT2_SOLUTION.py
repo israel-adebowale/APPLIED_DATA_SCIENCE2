@@ -213,7 +213,7 @@ barplot(labels_array, width, y_data, y_label, label, title)
 data_Germany = {'Urban pop. growth': data_urban_transpose['Germany'],
         'Electricity production': data_electricity_transpose['Germany'],
         'Agric. forestry and Fisheries': data_agriculture_transpose['Germany'],
-        'CO2 Emmissions': data_CO2_transpose['Germany'],
+        'CO2 Emissions': data_CO2_transpose['Germany'],
         'Forest Area': data_forest_transpose['Germany'],
         'GDP Annual Growth': data_GDP_transpose['Germany']        
         }
@@ -222,7 +222,7 @@ data_Germany = {'Urban pop. growth': data_urban_transpose['Germany'],
 data_Nigeria = {'Urban pop. growth': data_urban_transpose['Nigeria'],
         'Electricity production': data_electricity_transpose['Nigeria'],
         'Agric. forestry and Fisheries': data_agriculture_transpose['Nigeria'],
-        'CO2 Emmissions': data_CO2_transpose['Nigeria'],
+        'CO2 Emissions': data_CO2_transpose['Nigeria'],
         'Forest Area': data_forest_transpose['Nigeria'],
         'GDP Annual Growth': data_GDP_transpose['Nigeria']        
         }
@@ -248,12 +248,12 @@ def correlation_pvalues(data_x, data_y):
     return corr_dataframe
 
 
-# the indicator of interest is Urban population growth against the other factors from the Germany dataframe  
-data_x = df_Germany['Urban pop. growth']
-data_y = df_Germany
+# the indicator of interest is GDP Annual Growth against the other factors from the Nigeria dataframe  
+data_x = df_Nigeria['GDP Annual Growth']
+data_y = df_Nigeria
 
-urban_pop_growth = correlation_pvalues(data_x, data_y) # the correlation coefficient and p values of Urban population growth against other indicators are printed below
-print(urban_pop_growth)
+GDP_Annual_Growth = correlation_pvalues(data_x, data_y) # the correlation coefficient and p values of GDP Annual Growth against other indicators are printed below
+print(GDP_Annual_Growth)
 
 
 # the indicator of interest is forest area against the other factors from the Germany dataframe  
@@ -271,13 +271,14 @@ def correlation_heatmap(data, corr, title):
     corr: this is the correlation matrix of the dataframe 
     title: title of the heatmap
     """
+    plt.figure(figsize=(8,8), dpi=200)
     plt.imshow(corr, cmap='coolwarm', interpolation='none')
     plt.colorbar()
 
     # Show all ticks and label them with the dataframe column name
     plt.xticks(range(len(data.columns)), data.columns, rotation=90, fontsize=15)
     plt.yticks(range(len(data.columns)), data.columns, rotation=0, fontsize=15)
-    plt.gcf().set_size_inches(8,8)
+   
     plt.title(title, fontsize=20, fontweight='bold')
 
     # Loop over data dimensions and create text annotations
